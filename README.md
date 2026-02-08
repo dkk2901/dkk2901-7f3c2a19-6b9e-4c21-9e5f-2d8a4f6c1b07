@@ -19,7 +19,26 @@ The implementation focuses on correctness of auth/RBAC/org-scoping and a working
 - npm
 - Git
 
+To the the backend ( API) :
+npx nx serve api
+
+Start the dashboard
+
+npx nx serve dashboard
+
+Demo Accounts
+
+password: Password123!
+
+role 
+
+owner  owner@test.com  org1
+admin  admin@test.com
+Viewer  viewer@test.com
+
 ### Install dependencies
 From repository root:
 ```bash
 npm install
+
+
