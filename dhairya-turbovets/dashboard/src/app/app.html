@@ -1,0 +1,122 @@
+<h1>Dashboard</h1>
+
+<section style="max-width: 420px; display: grid; gap: 8px; margin-bottom: 16px;">
+  <h3>Login</h3>
+
+  <label>
+    Email
+    <input [(ngModel)]="email" style="width: 100%;" />
+  </label>
+
+  <label>
+    Password
+    <input [(ngModel)]="password" type="password" style="width: 100%;" />
+  </label>
+
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <button (click)="login()">Login</button>
+    <button (click)="logout()" [disabled]="!token">Logout</button>
+    <button (click)="fetchTasks()" [disabled]="!token">Refresh tasks</button>
+  </div>
+
+  <div *ngIf="me">
+    <b>Logged in as:</b> {{ me.email }} ({{ me.role }})
+  </div>
+</section>
+
+<section *ngIf="token" style="max-width: 700px; display: grid; gap: 8px; margin-bottom: 16px;">
+  <h3>Create Task</h3>
+
+  <label>
+    Title
+    <input [(ngModel)]="newTitle" style="width: 100%;" placeholder="e.g., Fix login bug" />
+  </label>
+
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <label>
+      Status
+      <select [(ngModel)]="newStatus">
+        <option value="todo">todo</option>
+        <option value="in_progress">in_progress</option>
+        <option value="done">done</option>
+      </select>
+    </label>
+
+    <label>
+      Category
+      <select [(ngModel)]="newCategory">
+        <option value="general">general</option>
+        <option value="bug">bug</option>
+        <option value="feature">feature</option>
+      </select>
+    </label>
+
+    <button (click)="createTask()">Create</button>
+  </div>
+</section>
+
+<section style="max-width: 900px;">
+  <h3>Tasks</h3>
+
+  <table border="1" cellpadding="6" cellspacing="0" *ngIf="tasks.length; else empty">
+    <thead>
+      <tr>
+        <th>order</th>
+        <th>title</th>
+        <th>status</th>
+        <th>category</th>
+        <th>actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let t of tasks">
+        <td>{{ t.order }}</td>
+
+        <td style="min-width: 240px;">
+          <input
+            [ngModel]="t.title"
+            (ngModelChange)="updateTask(t, { title: $event })"
+            style="width: 100%;"
+          />
+        </td>
+
+        <td>
+          <select
+            [ngModel]="t.status"
+            (ngModelChange)="updateTask(t, { status: $event })"
+          >
+            <option value="todo">todo</option>
+            <option value="in_progress">in_progress</option>
+            <option value="done">done</option>
+          </select>
+        </td>
+
+        <td>
+          <select
+            [ngModel]="t.category"
+            (ngModelChange)="updateTask(t, { category: $event })"
+          >
+            <option value="general">general</option>
+            <option value="bug">bug</option>
+            <option value="feature">feature</option>
+          </select>
+        </td>
+
+        <td>
+          <button (click)="deleteTask(t)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #empty>
+    <p>No tasks loaded yet.</p>
+  </ng-template>
+</section>
+
+
+<section *ngIf="error" style="margin-top: 16px;">
+  <h3>Error</h3>
+  <pre>{{ error | json }}</pre>
+</section>
